@@ -27,51 +27,53 @@ export default function AdminJobsTable() {
   }, [allAdminJobs, searchJobByText]);
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <Table>
-        <TableCaption className="mt-[25px]">A list of your recent posted jobs</TableCaption>
+        <TableCaption className="mt-[25px] text-sm sm:text-base">A list of your recent posted jobs</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Company Name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            <TableHead className="text-xs sm:text-sm">Company Name</TableHead>
+            <TableHead className="text-xs sm:text-sm">Role</TableHead>
+            <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Date</TableHead>
+            <TableHead className="text-right text-xs sm:text-sm">Action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-
           {
             Array.isArray(filterJobs) && filterJobs.map((job) => (
-              <tr>
-                <TableCell>{job?.company?.name}</TableCell>
-                <TableCell>{job?.title}</TableCell>
-                <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
+              <tr key={job._id} className="hover:bg-gray-50">
+                <TableCell className="text-xs sm:text-sm font-medium">{job?.company?.name}</TableCell>
+                <TableCell className="text-xs sm:text-sm">{job?.title}</TableCell>
+                <TableCell className="text-xs sm:text-sm hidden sm:table-cell">{job?.createdAt.split("T")[0]}</TableCell>
 
                 <TableCell className="text-right cursor-pointer">
                   <Popover>
                     <PopoverTrigger>
-                      <MoreHorizontal />
+                      <MoreHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
                     </PopoverTrigger>
 
                     <PopoverContent className="w-32">
-                      <div onClick={() => navigate(`/admin/jobs/create`)} className="flex items-center gap-2 w-fit cursor-pointer">
-                        <Edit2 className="w-4" />
-                        <span>Edit</span>
+                      <div 
+                        onClick={() => navigate(`/admin/jobs/create`)} 
+                        className="flex items-center gap-2 w-fit cursor-pointer hover:bg-gray-100 p-1 rounded"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        <span className="text-sm">Edit</span>
                       </div>
-                      <div onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
-                        <Eye className='w-4' />   
-                        <span>Applicants</span>
+                      <div 
+                        onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} 
+                        className='flex items-center w-fit gap-2 cursor-pointer mt-2 hover:bg-gray-100 p-1 rounded'
+                      >
+                        <Eye className='w-4 h-4' />   
+                        <span className="text-sm">Applicants</span>
                       </div>
                     </PopoverContent>
                   </Popover>
                 </TableCell>
               </tr>
             ))
-
           }
-
-
         </TableBody>
       </Table>
     </div>

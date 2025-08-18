@@ -19,20 +19,20 @@ export default function FilterCard() {
   ];
 
   return (
-    <div className='w-full bg-white p-3 rounded-md'>
-      <h1 className='font-bold text-lg'>Filter Jobs</h1>
-      <hr className='mt-3' />
+    <div className='w-full bg-white p-3 sm:p-4 rounded-md shadow-sm border border-gray-100'>
+      <h1 className='font-bold text-base sm:text-lg mb-3'>Filter Jobs</h1>
+      <hr className='mb-4' />
       <RadioGroup>
         {
           filterData.map((data, index) => (
-            <div>
-              <h1 className='font-bold text-lg'>{data.filterType}</h1>
+            <div key={index} className="mb-4 last:mb-0">
+              <h2 className='font-bold text-sm sm:text-base mb-2 text-gray-800'>{data.filterType}</h2>
               {
                 data.array.map((item, idx) => {
                   return (
-                    <div className='flex items-center space-x-2 my-2 cursor-pointer'>
+                    <div key={idx} className='flex items-center space-x-2 my-1 sm:my-2 cursor-pointer hover:bg-gray-50 p-1 rounded'>
                       <RadioGroupItem value={item} className="cursor-pointer"/>
-                      <Label className="cursor-pointer">{item}</Label>
+                      <Label className="cursor-pointer text-xs sm:text-sm text-gray-700">{item}</Label>
                     </div>
                   )
                 })

@@ -54,14 +54,14 @@ export default function JobDescription() {
     return (
         <>
             <Navbar />
-            <div className='max-w-7xl mx-auto my-10'>
-                <div className='flex items-center justify-between'>
-                    <div>
-                        <h1 className='font-bold text-xl'>{singlejob?.title}</h1>
-                        <div className='flex items-center gap-2 mt-4'>
-                            <Badge className={'text-blue-700 font-bold'} variant="ghost">{singlejob?.position} Positions</Badge>
-                            <Badge className={'text-[#F83002] font-bold'} variant="ghost">{singlejob?.jobType}</Badge>
-                            <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{singlejob?.salary} LPA</Badge>
+            <div className='max-w-7xl mx-auto my-6 sm:my-8 lg:my-10 px-4 sm:px-6 lg:px-8'>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6'>
+                    <div className="flex-1">
+                        <h1 className='font-bold text-lg sm:text-xl lg:text-2xl'>{singlejob?.title}</h1>
+                        <div className='flex flex-wrap items-center gap-2 mt-3 sm:mt-4'>
+                            <Badge className={'text-blue-700 font-bold text-xs'} variant="ghost">{singlejob?.position} Positions</Badge>
+                            <Badge className={'text-[#F83002] font-bold text-xs'} variant="ghost">{singlejob?.jobType}</Badge>
+                            <Badge className={'text-[#7209b7] font-bold text-xs'} variant="ghost">{singlejob?.salary} LPA</Badge>
                         </div>
                     </div>
                     <Button
@@ -73,25 +73,48 @@ export default function JobDescription() {
                             }
                         }}
                         disabled={isApplied}
-                        className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad] cursor-pointer'}`}>
+                        className={`rounded-lg text-sm sm:text-base w-full sm:w-auto ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad] cursor-pointer'}`}>
                         {isApplied ? 'Already Applied' : 'Apply Now'}
                     </Button>
                 </div>
-                <h1 className='border-b-2 border-b-gray-300 font-medium py-4'>Job Description</h1>
-                <div className='my-4'>
-                    <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>{singlejob?.title}</span></h1>
+                
+                <h1 className='border-b-2 border-b-gray-300 font-medium py-3 sm:py-4 text-base sm:text-lg mt-6 sm:mt-8'>Job Description</h1>
+                
+                <div className='my-4 sm:my-6 space-y-3 sm:space-y-4'>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Role:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.title}</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Location: <span className='pl-4 font-normal text-gray-800'>{singlejob?.location}</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Location:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.location}</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singlejob?.description}</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Description:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.description}</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singlejob?.experienceLevel} yrs</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Experience:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.experienceLevel} yrs</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singlejob?.salary} LPA</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Salary:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.salary} LPA</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singlejob?.applications?.length}</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Total Applicants:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.applications?.length}</span>
+                    </div>
 
-                    <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singlejob?.createdAt.split("T")[0]}</span></h1>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
+                        <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Posted Date:</h1>
+                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.createdAt.split("T")[0]}</span>
+                    </div>
                 </div>
             </div>
         </>

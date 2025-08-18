@@ -68,80 +68,86 @@ const UpdateProfile = ({ open, setOpen }) => {
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="sm:max-w-[425px]" onInteractOutside={() => setOpen(false)}>
+                <DialogContent className="sm:max-w-[425px] md:max-w-[500px] lg:max-w-[600px] w-[95vw] max-h-[90vh] overflow-y-auto" onInteractOutside={() => setOpen(false)}>
                     <DialogHeader>
-                        <DialogTitle>Update Profile</DialogTitle>
+                        <DialogTitle className="text-lg sm:text-xl">Update Profile</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={submitHandler}>
                         <div className='grid gap-4 py-4'>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="fullName" className="text-right">Name</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="fullName" className="text-sm sm:text-base sm:text-right">Name</Label>
                                 <Input
                                     id="fullName"
                                     name="fullName"
                                     type="text"
                                     value={input.fullName}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-sm sm:text-base"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="email" className="text-right">Email</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="email" className="text-sm sm:text-base sm:text-right">Email</Label>
                                 <Input
                                     id="email"
                                     name="email"
                                     type="email"
                                     value={input.email}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-sm sm:text-base"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="phoneNumber" className="text-right">Number</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="phoneNumber" className="text-sm sm:text-base sm:text-right">Number</Label>
                                 <Input
                                     id="phoneNumber"
                                     name="phoneNumber"
                                     type="text"
                                     value={input.phoneNumber}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-sm sm:text-base"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="bio" className="text-right">Bio</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="bio" className="text-sm sm:text-base sm:text-right">Bio</Label>
                                 <Input
                                     id="bio"
                                     name="bio"
                                     value={input.bio}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-sm sm:text-base"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="skills" className="text-right">Skills</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="skills" className="text-sm sm:text-base sm:text-right">Skills</Label>
                                 <Input
                                     id="skills"
                                     name="skills"
                                     value={input.skills}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-sm sm:text-base"
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="file" className="text-right">Resume</Label>
+                            <div className='grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4'>
+                                <Label htmlFor="file" className="text-sm sm:text-base sm:text-right">Resume</Label>
                                 <Input
                                     id="file"
                                     name="file"
                                     type="file"
                                     accept="application/pdf"
                                     onChange={fileChangeHandler}
-                                    className="col-span-3"
+                                    className="col-span-1 sm:col-span-3 text-xs sm:text-sm"
                                 />
                             </div>
                         </div>
                         <DialogFooter>
                             {
-                                loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4 cursor-pointer">Update</Button>
+                                loading ? (
+                                    <Button className="w-full my-3 sm:my-4 text-sm sm:text-base"> 
+                                        <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait 
+                                    </Button>
+                                ) : (
+                                    <Button type="submit" className="w-full my-3 sm:my-4 cursor-pointer text-sm sm:text-base">Update</Button>
+                                )
                             }
                         </DialogFooter>
                     </form>

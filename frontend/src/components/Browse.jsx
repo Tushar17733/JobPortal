@@ -9,15 +9,15 @@ export default function Browse() {
     return (
         <div>
             <Navbar />
-            <div className='max-w-7xl mx-auto my-10'>
-                <h1 className='font-bold text-xl my-10'>
+            <div className='max-w-7xl mx-auto my-6 sm:my-8 lg:my-10 px-4 sm:px-6 lg:px-8'>
+                <h1 className='font-bold text-lg sm:text-xl lg:text-2xl my-6 sm:my-8 lg:my-10 text-center sm:text-left'>
                     Search Results ({randomJobs.length})
                 </h1>
-                <div className='grid grid-cols-3 gap-4'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
                     {
                         randomJobs.map((item, index) => {
                             return (
-                                <Job />
+                                <Job key={index} />
                             )
                         })
                     }
@@ -25,6 +25,5 @@ export default function Browse() {
             </div>
             <Footer/>
         </div>
-
     )
 }

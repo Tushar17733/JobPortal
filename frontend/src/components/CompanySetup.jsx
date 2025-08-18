@@ -86,85 +86,85 @@ export default function CompanySetup() {
     return (
         <div>
             <Navbar />
-            <div className='max-w-3xl mx-auto my-10'>
-                <form className='shadow-lg p-8' onSubmit={submitHandler}>
+            <div className='max-w-3xl mx-auto my-6 sm:my-8 lg:my-10 px-4 sm:px-6 lg:px-8'>
+                <form className='shadow-lg p-4 sm:p-6 lg:p-8 rounded-lg' onSubmit={submitHandler}>
                     {/* Header */}
-                    <div className='flex items-center gap-5 mb-10'>
+                    <div className='flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 mb-6 sm:mb-8 lg:mb-10'>
                         <Button
                             variant="ghost"
                             onClick={() => navigate("/admin")}
-                            className='flex items-center gap-2 text-gray-500 font-semibold cursor-pointer'
+                            className='flex items-center gap-2 text-gray-500 font-semibold cursor-pointer w-fit'
                         >
-                            <ArrowLeft />
-                            <span>Back</span>
+                            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <span className="text-sm sm:text-base">Back</span>
                         </Button>
-                        <h1 className='font-bold text-xl ml-[170px]'>Company Setup</h1>
+                        <h1 className='font-bold text-lg sm:text-xl lg:text-2xl sm:ml-auto'>Company Setup</h1>
                     </div>
 
                     {/* Grid */}
-                    <div className='grid grid-cols-2 gap-8'>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8'>
                         {/* Company Name */}
                         <div>
-                            <Label className="mb-[10px]">Company Name</Label>
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Company Name</Label>
                             <Input
                                 type="text"
                                 name="name"
                                 value={input.name}
                                 onChange={changeEventHandler}
+                                className="text-sm sm:text-base"
                             />
                         </div>
 
                         {/* Website */}
                         <div>
-                            <Label className="mb-[10px]">Website</Label>
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Website</Label>
                             <Input
                                 type="text"
                                 name="website"
                                 value={input.website}
                                 onChange={changeEventHandler}
+                                className="text-sm sm:text-base"
                             />
                         </div>
 
                         {/* Description - Full Width */}
-                        <div className="col-span-2">
-                            <Label className="mb-[10px]">Description</Label>
+                        <div className="col-span-1 sm:col-span-2">
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Description</Label>
                             <textarea
                                 name="description"
                                 value={input.description}
                                 onChange={changeEventHandler}
                                 rows="4"
-                                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
-
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base"
                             />
                         </div>
 
                         {/* Logo */}
                         <div>
-                            <Label className="mb-[10px]">Logo</Label>
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Logo</Label>
                             <Input
                                 accept="image/*"
                                 type="file"
                                 onChange={changeFileHandler}
+                                className="text-xs sm:text-sm"
                             />
                         </div>
 
                         {/* Location (to the right of Logo) */}
                         <div>
-                            <Label className="mb-[10px]">Location</Label>
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Location</Label>
                             <Input
                                 type="text"
                                 name="location"
                                 value={input.location}
                                 onChange={changeEventHandler}
+                                className="text-sm sm:text-base"
                             />
                         </div>
                     </div>
 
                     {/* Submit */}
-                    {/* {
-                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full mt-8 cursor-pointer">Update</Button>
-                    } */}
-                    <Button type="submit" disabled={loading} className="w-full mt-8 cursor-pointer">
+                    <Button type="submit" disabled={loading} className="w-full mt-6 sm:mt-8 cursor-pointer text-sm sm:text-base">
                         {loading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
@@ -173,11 +173,8 @@ export default function CompanySetup() {
                             "Update"
                         )}
                     </Button>
-
-
                 </form>
             </div>
-
         </div>
     )
 }

@@ -27,8 +27,8 @@ export default function Applicants() {
     return (
         <div>
             <Navbar />
-            <div className='max-w-7xl mx-auto mt-15'>
-                <h1 className='font-bold text-xl my-5'>
+            <div className='max-w-7xl mx-auto mt-8 sm:mt-12 lg:mt-15 px-4 sm:px-6 lg:px-8'>
+                <h1 className='font-bold text-lg sm:text-xl lg:text-2xl my-4 sm:my-5 text-center sm:text-left'>
                     Applicants ({applicants?.applications?.length})
                 </h1>
                 <ApplicantsTable />

@@ -37,26 +37,38 @@ export default function CompanyCreate() {
     return (
         <div>
             <Navbar />
-            <div className='max-w-4xl mx-auto'>
-                <div className='my-10'>
-                    <h1 className='font-bold text-2xl'>Your Company Name</h1>
-                    <p className='text-gray-500'>What would you like to give your company name? you can change this later</p>
+            <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='my-6 sm:my-8 lg:my-10'>
+                    <h1 className='font-bold text-xl sm:text-2xl lg:text-3xl mb-2 sm:mb-3'>Your Company Name</h1>
+                    <p className='text-gray-500 text-sm sm:text-base'>What would you like to give your company name? you can change this later</p>
                 </div>
 
-                <Label>Company Name</Label>
-                <Input
-                    type="text"
-                    className="my-2"
-                    placeholder="Google, Microsoft etc."
-                    onChange={(e) => setCompanyName(e.target.value)}
-                />
+                <div className="space-y-2 sm:space-y-3">
+                    <Label className="text-sm sm:text-base">Company Name</Label>
+                    <Input
+                        type="text"
+                        className="text-sm sm:text-base"
+                        placeholder="Google, Microsoft etc."
+                        onChange={(e) => setCompanyName(e.target.value)}
+                    />
+                </div>
 
-                <div className='flex items-center gap-2 my-10'>
-                    <Button className="cursor-pointer" variant="outline" onClick={() => navigate("/admin")}>Cancel</Button>
-                    <Button onClick={registerNewCompany} className="cursor-pointer">Continue</Button>
+                <div className='flex flex-col sm:flex-row items-center gap-3 sm:gap-4 my-6 sm:my-8 lg:my-10'>
+                    <Button 
+                        className="cursor-pointer text-sm sm:text-base w-full sm:w-auto" 
+                        variant="outline" 
+                        onClick={() => navigate("/admin")}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        onClick={registerNewCompany} 
+                        className="cursor-pointer text-sm sm:text-base w-full sm:w-auto"
+                    >
+                        Continue
+                    </Button>
                 </div>
             </div>
         </div>
-
     )
 }

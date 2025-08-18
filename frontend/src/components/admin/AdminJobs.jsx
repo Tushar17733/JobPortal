@@ -23,20 +23,24 @@ export default function AdminJobs() {
     return (
         <div>
             <Navbar />
-            <div className='max-w-6xl mx-auto my-10'>
-                <div className='flex items-center justify-between'>
+            <div className='max-w-6xl mx-auto my-6 sm:my-8 lg:my-10 px-4 sm:px-6 lg:px-8'>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6'>
                     <Input
-                        className="w-[240px]"
+                        className="w-full sm:w-[240px] text-sm sm:text-base"
                         placeholder="Filter by name , role"
                         onChange={(e) => setInput(e.target.value)}
                     />
-                    <Button className="cursor-pointer" onClick={() => navigate("/admin/jobs/create")}>Create new job</Button>
+                    <Button 
+                        className="cursor-pointer text-sm sm:text-base w-full sm:w-auto" 
+                        onClick={() => navigate("/admin/jobs/create")}
+                    >
+                        Create new job
+                    </Button>
                 </div>
-                <br />
-                <br />
-                <AdminJobsTable />
+                <div className="mt-6 sm:mt-8">
+                    <AdminJobsTable />
+                </div>
             </div>
         </div>
-
     )
 }
