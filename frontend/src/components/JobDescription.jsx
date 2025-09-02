@@ -8,8 +8,11 @@ import { APPLICATION_API_ENDPOINT, JOB_API_ENDPOINT } from '../utils/constant';
 import axios from 'axios';
 import { setSingleJob } from '../redux/jobSlice';
 import { toast } from 'sonner';
+import DOMPurify from "dompurify";
+import useSavedJobs from '../hooks/useSavedJobs';
 
 export default function JobDescription() {
+    useSavedJobs(); // Ensure saved jobs persist
     const params = useParams()
     const jobId = params.id;
     const { singlejob } = useSelector(store => store.job)
@@ -77,9 +80,9 @@ export default function JobDescription() {
                         {isApplied ? 'Already Applied' : 'Apply Now'}
                     </Button>
                 </div>
-                
+
                 <h1 className='border-b-2 border-b-gray-300 font-medium py-3 sm:py-4 text-base sm:text-lg mt-6 sm:mt-8'>Job Description</h1>
-                
+
                 <div className='my-4 sm:my-6 space-y-3 sm:space-y-4'>
                     <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
                         <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Role:</h1>
@@ -93,8 +96,12 @@ export default function JobDescription() {
 
                     <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
                         <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Description:</h1>
-                        <span className='font-normal text-gray-800 text-sm sm:text-base'>{singlejob?.description}</span>
+                        <div
+                            className='font-normal text-gray-800 text-sm sm:text-base'
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(singlejob?.description) }}
+                        />
                     </div>
+
 
                     <div className='flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2'>
                         <h1 className='font-bold text-sm sm:text-base min-w-[80px] sm:min-w-[100px]'>Experience:</h1>

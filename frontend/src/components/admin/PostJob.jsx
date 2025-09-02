@@ -11,6 +11,8 @@ import { JOB_API_ENDPOINT } from '../../utils/constant';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 export default function PostJob() {
     const { companies } = useSelector(store => store.company);
@@ -38,36 +40,57 @@ export default function PostJob() {
         const company = companies.find(company => company.name.toLowerCase() === value);
         setInput({ ...input, companyId: company?._id });
     }
+    const descriptionChangeHandler = (value) => {
+        setInput({ ...input, description: value });
+    }
+    const payload = {
+        ...input,
+        salary: Number(input.salary),
+        experience: Number(input.experience),
+        position: Number(input.position),
+    };
 
     const submitEventHandler = async (e) => {
         e.preventDefault();
-        try {
-            dispatch(setLoading(true));
-            const response = await axios.post(`${JOB_API_ENDPOINT}/post`, input,{
-                 headers : {
-                    'Content-type': 'application/json',
-                },
-                withCredentials: true
-            });
-            if(response.data.success){
-                toast.success(response.data.message);
-                navigate('/admin/jobs');
-            }
 
-        } catch (error) {
-            console.log(error.response.data.message);
-        }finally{
-            dispatch(setLoading(false));
+        if (!input.companyId) {
+            toast.error("Please select a company before posting a job");
+            return;
         }
 
-    }
+        try {
+            dispatch(setLoading(true));
+            const response = await axios.post(`${JOB_API_ENDPOINT}/post`, input,
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
+            );
+            console.log(response)
+
+
+            if (response.data.success) {
+                toast.success(response.data.message || "Job posted successfully");
+                navigate("/admin/jobs");
+            } else {
+                toast.error(response.data.message || "Failed to post job");
+            }
+        } catch (error) {
+            const errMsg = error?.response?.data?.message || error.message || "Something went wrong";
+            toast.error(errMsg);
+            console.error("Job post error:", errMsg);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+
     return (
         <div>
             <Navbar />
             <div className='flex items-center justify-center w-full my-5 px-4 sm:px-6 lg:px-8'>
                 <form onSubmit={submitEventHandler} className='p-4 sm:p-6 lg:p-8 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] border border-gray-200 shadow-lg rounded-md'>
                     <h1 className='font-bold text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-center sm:text-left'>Post New Job</h1>
-                    
+
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5'>
                         <div>
                             <Label className="text-sm sm:text-base">Title</Label>
@@ -90,14 +113,11 @@ export default function PostJob() {
                             />
                         </div>
                         <div className="col-span-1 sm:col-span-2">
-                            <Label className="mb-[10px] text-sm sm:text-base">Description</Label>
-                            <textarea
-                                type="text"
-                                name="description"
+                            <Label className="text-sm mb-2 sm:text-base">Description</Label>
+                            <ReactQuill
                                 value={input.description}
-                                onChange={changeEventHandler}
-                                rows="4"
-                                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base"
+                                onChange={descriptionChangeHandler}
+                                className="bg-white"
                             />
                         </div>
                         <div>
@@ -164,7 +184,7 @@ export default function PostJob() {
                                                     companies && companies.map((company) => {
                                                         return (
                                                             <SelectItem
-                                                            className="cursor-pointer"
+                                                                className="cursor-pointer"
                                                                 key={company?._id}
                                                                 value={company?.name.toLowerCase()}
                                                             >
@@ -191,7 +211,7 @@ export default function PostJob() {
                             "Post New Job"
                         )}
                     </Button>
-                    
+
                     {
                         companies.length === 0 && (
                             <p className='text-red-600 text-xs sm:text-sm font-bold text-center my-3'>

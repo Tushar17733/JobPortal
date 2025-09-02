@@ -1,8 +1,10 @@
 import React from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
+import { useSelector } from 'react-redux';
 
 export default function AppliedJobTable() {
+    const { allAppliedJobs } = useSelector(store => store.job);
     return (
         <div className="overflow-x-auto">
             <Table>
@@ -17,16 +19,17 @@ export default function AppliedJobTable() {
                 </TableHeader>
 
                 <TableBody>
-                    {[1, 2].map((item, index) => (
-                        <TableRow key={index} className="hover:bg-gray-50">
-                            <TableCell className="text-xs sm:text-sm">17-07-2024</TableCell>
-                            <TableCell className="text-xs sm:text-sm font-medium">Frontend Developer</TableCell>
-                            <TableCell className="text-xs sm:text-sm hidden sm:table-cell">Google</TableCell>
-                            <TableCell className="text-right">
-                                <Badge className="text-xs">Selected</Badge>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {
+                        allAppliedJobs.length <= 0 ? <span>You haven't applied any job yet.</span> : 
+                        allAppliedJobs.map((appliedJob) => (
+                            <TableRow key={appliedJob._id}>
+                                <TableCell>{appliedJob?.createdAt?.split("T")[0]}</TableCell>
+                                <TableCell>{appliedJob.job?.title}</TableCell>
+                                <TableCell>{appliedJob.job?.company?.name}</TableCell>
+                                <TableCell className="text-right"><Badge className={`${appliedJob?.status === "rejected" ? 'bg-red-400' : appliedJob.status === 'pending' ? 'bg-gray-400' : 'bg-green-400'}`}>{appliedJob.status.toUpperCase()}</Badge></TableCell>
+                            </TableRow>
+                        ))
+                    }
                 </TableBody>
             </Table>
         </div>

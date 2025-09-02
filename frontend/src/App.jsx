@@ -14,7 +14,15 @@ import CompanySetup from "./components/CompanySetup"
 import AdminJobs from "./components/admin/AdminJobs"
 import PostJob from "./components/admin/PostJob"
 import Applicants from "./components/admin/Applicants"
+import ProtectedRoute from "./components/admin/ProtectedRoute"
+import Saved from "./components/Saved"
+import useSavedJobs from "./hooks/useSavedJobs"
 
+// Component to initialize saved jobs persistence
+function AppInitializer() {
+  useSavedJobs();
+  return null;
+}
 
 const appRouter = createBrowserRouter([
   { //user pages
@@ -45,40 +53,48 @@ const appRouter = createBrowserRouter([
     path:'/profile',
     element:<Profile/>
   },
+  {
+    path:'/saved',
+    element:<Saved/>
+  },
+
+
   //admin pages
   {
     path:'/admin',
-    element:<Admin/>
+    element:<ProtectedRoute><Admin/></ProtectedRoute>
   },
   {
     path:'/admin/companies',
-    element:<Companies/>
+    element:<ProtectedRoute><Companies/></ProtectedRoute>
   },
   {
     path:'/admin/companies/create',
-    element:<CompanyCreate/>
+    element:<ProtectedRoute><CompanyCreate/></ProtectedRoute>
   },
   {
     path:'/admin/companies/:id',
-    element:<CompanySetup/>
+    element:<ProtectedRoute><CompanySetup/></ProtectedRoute>
   },
   {
     path:'/admin/jobs',
-    element:<AdminJobs/>
+    element:<ProtectedRoute><AdminJobs/></ProtectedRoute>
   },
   {
     path:'/admin/jobs/create',
-    element:<PostJob/>
+    element:<ProtectedRoute><PostJob/></ProtectedRoute>
   },
   {
     path:'/admin/jobs/:id/applicants',
-    element:<Applicants/>
+    element:<ProtectedRoute><Applicants/></ProtectedRoute>
   },
 ])
+
 function App() {
   return (
     <>
-    <RouterProvider router={appRouter}  />
+      <AppInitializer />
+      <RouterProvider router={appRouter} />
     </>
   )
 }

@@ -11,13 +11,16 @@ import { USER_API_ENDPOINT } from '../../utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setUser } from '../../redux/authSlice';
 import { Loader2 } from 'lucide-react'
+import { clearJobs } from '../../redux/jobSlice'
+import { clearCompany } from '../../redux/companySlice'
+import { clearApplicants } from '../../redux/applicationSlice'
 
 export default function Login() {
 
     const [input, setInput] = useState({
         email: "",
         password: "",
-        role: "",
+        role: "candidate"
     });
     const navigate = useNavigate()
     const { loading } = useSelector(store => store.auth)
@@ -25,13 +28,22 @@ export default function Login() {
     const { user } = useSelector(store => store.auth);
 
     const changeEventHandler = (e) => {
-        setInput({ ...input, [e.target.name]: e.target.value });
+        setInput(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
     };
 
     const SubmitHandler = async (e) => {
         e.preventDefault()
         try {
             dispatch(setLoading(true))
+            
+            // Clear any existing Redux data before login to ensure clean state
+            dispatch(clearJobs());
+            dispatch(clearCompany());
+            dispatch(clearApplicants());
+            
             const res = await axios.post(`${USER_API_ENDPOINT}/login`, input, {
                 headers: {
                     "Content-Type": "application/json",

@@ -11,6 +11,7 @@ import { USER_API_ENDPOINT } from '../../utils/constant.js';
 import { Loader2 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../redux/authSlice';
+import { useEffect } from 'react';
 
 export default function Signup() {
     const [input, setInput] = useState({
@@ -22,7 +23,7 @@ export default function Signup() {
         file: ""
     });
     const navigate = useNavigate()
-    const { loading } = useSelector(store => store.auth)
+    const { loading,user } = useSelector(store => store.auth)
     const dispatch = useDispatch()
 
     const changeEventHandler = (e) => {

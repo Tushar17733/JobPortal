@@ -7,11 +7,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { USER_API_ENDPOINT } from '../../utils/constant';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { setUser } from '../../redux/authSlice';
+import { setUser, logout } from '../../redux/authSlice';
+import { clearJobs } from '../../redux/jobSlice';
+import { clearCompany } from '../../redux/companySlice';
+import { clearApplicants } from '../../redux/applicationSlice';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
     const { user } = useSelector(store => store.auth);
+    const savedJobs = useSelector(store => store?.job?.savedJobs) || [];
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,7 +25,11 @@ export default function Navbar() {
             const res = await axios.get(`${USER_API_ENDPOINT}/logout`, { withCredentials: true });
 
             if (res.data.success) {
-                dispatch(setUser(null));
+                // Clear all Redux data when logging out
+                dispatch(logout());
+                dispatch(clearJobs());
+                dispatch(clearCompany());
+                dispatch(clearApplicants());
                 navigate("/");
                 toast.success(res.data.message);
             }
@@ -36,7 +44,7 @@ export default function Navbar() {
             <div className='flex items-center justify-between mx-auto max-w-7xl h-16 px-4 sm:px-6 lg:px-8'>
                 <Link to={user?.role === "recruiter" ? "/admin" : "/"}>
                     <div className='cursor-pointer'>
-                        <h1 className='text-xl sm:text-2xl font-bold'>Job<span className='text-[#F83002]'>Portal</span></h1>
+                        <h1 className='text-xl sm:text-2xl font-bold'>Job<span className='text-[#F83002]'>Hunt</span></h1>
                     </div>
                 </Link>
                 
@@ -54,6 +62,14 @@ export default function Navbar() {
                                     <Link to="/" className="hover:text-[#6A38C2] transition-colors">Home</Link>
                                     <Link to="/jobs" className="hover:text-[#6A38C2] transition-colors"> Jobs</Link>
                                     <Link to="/browse" className="hover:text-[#6A38C2] transition-colors"> Browse</Link>
+                                    <Link to="/saved" className="hover:text-[#6A38C2] transition-colors relative">
+                                        Saved
+                                        {savedJobs.length > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                                {savedJobs.length}
+                                            </span>
+                                        )}
+                                    </Link>
                                 </>
                             )
                         }
@@ -177,6 +193,7 @@ export default function Navbar() {
                                     <Link to="/" className="hover:text-[#6A38C2] transition-colors w-full py-2">Home</Link>
                                     <Link to="/jobs" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Jobs</Link>
                                     <Link to="/browse" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Browse</Link>
+                                    <Link to="/saved" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Saved</Link>
                                 </>
                             )
                         }

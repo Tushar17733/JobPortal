@@ -9,8 +9,12 @@ import { Label } from './ui/label'
 import AppliedJobTable from './AppliedJobTable'
 import UpdateProfile from './UpdateProfile'
 import { useSelector } from 'react-redux'
+import useGetAllAppliedJobs from '../hooks/useGetAllAppliedJobs'
+import useSavedJobs from '../hooks/useSavedJobs'
 
 export default function Profile() {
+    useGetAllAppliedJobs();
+    useSavedJobs(); // Ensure saved jobs persist
     const isResume = true
     const [open, setOpen] = useState(false);
     const { user } = useSelector(store => store.auth);
@@ -19,7 +23,7 @@ export default function Profile() {
         <div>
             <Navbar />
             
-            <div className='max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl my-4 sm:my-5 p-4 sm:p-6 lg:p-8 mx-4 sm:mx-6 lg:mx-8'>
+            <div className='max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl my-4 sm:my-5 p-4 sm:p-6 lg:p-8'>
                 <div className='flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-6'>
                     <section className='flex items-center gap-3 sm:gap-4'>
                         <Button className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 border-0 border-r-[50%]" variant="outline" size="icon">
@@ -81,8 +85,8 @@ export default function Profile() {
                 </div>
             </div>
             
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl mx-4 sm:mx-6 lg:mx-8'>
-                <h1 className='font-bold text-base sm:text-lg my-4 sm:my-5 px-4 sm:px-6 lg:px-8'>Applied Jobs</h1>
+            <div className='max-w-4xl mx-auto bg-white rounded-2xl my-4 sm:my-5 p-4 sm:p-6 lg:p-8'>
+                <h1 className='font-bold text-base sm:text-lg mb-4 sm:mb-5'>Applied Jobs</h1>
                 <AppliedJobTable />
             </div>
             <UpdateProfile open={open} setOpen={setOpen} />

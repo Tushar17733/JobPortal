@@ -1,4 +1,4 @@
-import { setSingleCompany } from '../redux/companySlice'
+import { setSingleCompany, clearCompany } from '../redux/companySlice'
 import { COMPANY_API_ENDPOINT } from '../utils/constant'
 import axios from 'axios'
 import { useEffect } from 'react'
@@ -10,6 +10,9 @@ const useGetCompanyById = (companyId) => {
     useEffect(() => {
         const fetchSingleCompany = async () => {
             try {
+                // Clear any existing company data first to prevent showing stale data
+                dispatch(clearCompany());
+                
                 const res = await axios.get(`${COMPANY_API_ENDPOINT}/get/${companyId}`, { withCredentials: true });
                 if (res.data.success) {
                     dispatch(setSingleCompany(res.data.company));

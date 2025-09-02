@@ -1,8 +1,10 @@
 import React from 'react'
 import LatestJobCards from './LatestJobCards';
 import { useSelector } from 'react-redux';
+import useSavedJobs from '../hooks/useSavedJobs';
 
 export default function LatestJobs() {
+    useSavedJobs(); // Ensure saved jobs persist
     const {allJobs} = useSelector(store=>store.job);
 
     return (
