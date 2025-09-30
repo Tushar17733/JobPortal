@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { setSearchedQuery } from '../redux/jobSlice';
 
 export default function FilterCard() {
-
+  
   const filterData = [
     {
       filterType: "Location",

@@ -55,7 +55,7 @@ export default function AdminJobsTable() {
 
                     <PopoverContent className="w-32">
                       <div 
-                        onClick={() => navigate(`/admin/jobs/create`)} 
+                        onClick={() => navigate(`/admin/jobs/create?edit=${job._id}`)} 
                         className="flex items-center gap-2 w-fit cursor-pointer hover:bg-gray-100 p-1 rounded"
                       >
                         <Edit2 className="w-4 h-4" />

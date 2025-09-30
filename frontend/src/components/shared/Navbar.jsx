@@ -11,7 +11,7 @@ import { setUser, logout } from '../../redux/authSlice';
 import { clearJobs } from '../../redux/jobSlice';
 import { clearCompany } from '../../redux/companySlice';
 import { clearApplicants } from '../../redux/applicationSlice';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MessageCircle } from 'lucide-react';
 
 export default function Navbar() {
     const { user } = useSelector(store => store.auth);
@@ -56,6 +56,10 @@ export default function Navbar() {
                                 <>
                                     <Link to="/admin/companies" className="hover:text-[#6A38C2] transition-colors">Companies</Link>
                                     <Link to="/admin/jobs" className="hover:text-[#6A38C2] transition-colors"> Jobs</Link>
+                                    <Link to="/admin/messages" className="hover:text-[#6A38C2] transition-colors flex items-center gap-1">
+                                        <MessageCircle className="h-4 w-4" />
+                                        Messages
+                                    </Link>
                                 </>
                             ) : (
                                 <>
@@ -69,6 +73,10 @@ export default function Navbar() {
                                                 {savedJobs.length}
                                             </span>
                                         )}
+                                    </Link>
+                                    <Link to="/messages" className="hover:text-[#6A38C2] transition-colors flex items-center gap-1">
+                                        <MessageCircle className="h-4 w-4" />
+                                        Messages
                                     </Link>
                                 </>
                             )
@@ -187,6 +195,10 @@ export default function Navbar() {
                                 <>
                                     <Link to="/admin/companies" className="hover:text-[#6A38C2] transition-colors w-full py-2">Companies</Link>
                                     <Link to="/admin/jobs" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Jobs</Link>
+                                    <Link to="/admin/messages" className="hover:text-[#6A38C2] transition-colors w-full py-2 flex items-center gap-2">
+                                        <MessageCircle className="h-4 w-4" />
+                                        Messages
+                                    </Link>
                                 </>
                             ) : (
                                 <>
@@ -194,6 +206,10 @@ export default function Navbar() {
                                     <Link to="/jobs" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Jobs</Link>
                                     <Link to="/browse" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Browse</Link>
                                     <Link to="/saved" className="hover:text-[#6A38C2] transition-colors w-full py-2"> Saved</Link>
+                                    <Link to="/messages" className="hover:text-[#6A38C2] transition-colors w-full py-2 flex items-center gap-2">
+                                        <MessageCircle className="h-4 w-4" />
+                                        Messages
+                                    </Link>
                                 </>
                             )
                         }

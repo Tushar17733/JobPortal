@@ -16,6 +16,8 @@ import PostJob from "./components/admin/PostJob"
 import Applicants from "./components/admin/Applicants"
 import ProtectedRoute from "./components/admin/ProtectedRoute"
 import Saved from "./components/Saved"
+import Messages from "./components/Messages"
+import AdminMessages from "./components/admin/AdminMessages"
 import useSavedJobs from "./hooks/useSavedJobs"
 
 // Component to initialize saved jobs persistence
@@ -57,6 +59,10 @@ const appRouter = createBrowserRouter([
     path:'/saved',
     element:<Saved/>
   },
+  {
+    path:'/messages',
+    element:<Messages/>
+  },
 
 
   //admin pages
@@ -87,6 +93,10 @@ const appRouter = createBrowserRouter([
   {
     path:'/admin/jobs/:id/applicants',
     element:<ProtectedRoute><Applicants/></ProtectedRoute>
+  },
+  {
+    path:'/admin/messages',
+    element:<ProtectedRoute><AdminMessages/></ProtectedRoute>
   },
 ])
 

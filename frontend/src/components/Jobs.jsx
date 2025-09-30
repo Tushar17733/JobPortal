@@ -3,147 +3,143 @@ import Navbar from './shared/Navbar'
 import FilterCard from './FilterCard'
 import Job from './Job'
 import Footer from './shared/Footer'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Button } from './ui/button'
 import { Filter } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import useSavedJobs from '../hooks/useSavedJobs'
+import { setSearchedQuery } from '../redux/jobSlice'
+import axios from 'axios'
+import { JOB_API_ENDPOINT } from '../utils/constant'
 
 export default function Jobs() {
-    useSavedJobs(); // Ensure saved jobs persist
-    const { allJobs, searchedQuery } = useSelector(store => store.job)
-    const [showFilters, setShowFilters] = useState(false);
-    const [filterJobs, setFilterJobs] = useState(allJobs);
+  const JOB_CATEGORIES = [
+    { value: "IT & Software Development", label: "IT & Software Development", icon: "💻" },
+    { value: "Mechanical Engineering", label: "Mechanical Engineering", icon: "🔧" },
+    { value: "Civil Engineering", label: "Civil Engineering", icon: "🏗️" },
+    { value: "Electrical & Electronics", label: "Electrical & Electronics", icon: "⚡" },
+    { value: "Finance & Accounting", label: "Finance & Accounting", icon: "💰" },
+    { value: "Sales & Marketing", label: "Sales & Marketing", icon: "📈" },
+    { value: "Education & Training", label: "Education & Training", icon: "🎓" },
+  ];
+  
+  useSavedJobs();
+  const { allJobs = [] } = useSelector(store => store.job) || {};
+  const dispatch = useDispatch();
+  
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [categoryCounts, setCategoryCounts] = useState([]);
+  const [filterJobs, setFilterJobs] = useState([]);
 
-    // Function to check if a job's salary falls within any of the selected ranges
-    const isSalaryInRange = (jobSalary, salaryRanges) => {
-        if (salaryRanges.length === 0) return true;
-        return salaryRanges.some(range => {
-            switch (range) {
-                case "0-40k":
-                    return jobSalary <= 0.4; // 40k = 0.4 LPA
-                case "40k-1lakh":
-                    return jobSalary > 0.4 && jobSalary <= 1; // 40k to 1 LPA
-                case "1lakh to 5lakh":
-                    return jobSalary > 1 && jobSalary <= 5; // 1 LPA to 5 LPA
-                default:
-                    return false;
-            }
-        });
-    };
-
-    // Function to check if a job matches any of the selected locations
-    const matchesLocation = (jobLocation, locationFilters) => {
-        if (locationFilters.length === 0) return true;
-        return locationFilters.some(filter => 
-            jobLocation.toLowerCase() === filter.toLowerCase()
-        );
-    };
-
-    // Function to check if a job matches any of the selected industries
-    const matchesIndustry = (jobTitle, industryFilters) => {
-        if (industryFilters.length === 0) return true;
-        return industryFilters.some(filter => 
-            jobTitle.toLowerCase().includes(filter.toLowerCase())
-        );
-    };
-
-    useEffect(() => {
-        let filteredJobs = allJobs;
-
-        // Apply search filter
-        if (searchedQuery) {
-            const searchTerms = searchedQuery.split(' ').filter(term => term.trim() !== '');
-            
-            // Define filter categories - updated to match FilterCard
-            const salaryRanges = ["0-40k", "40k-1lakh", "1lakh to 5lakh"];
-            const locations = ["Surat", "Bangalore", "Hyderabad", "US", "Mumbai"];
-            const industries = ["Frontend Developer", "Backend Developer", "FullStack Developer"];
-
-            // Categorize the search terms
-            const salaryFilters = searchTerms.filter(term => salaryRanges.includes(term));
-            const locationFilters = searchTerms.filter(term => locations.includes(term));
-            const industryFilters = searchTerms.filter(term => industries.includes(term));
-            const textSearchTerms = searchTerms.filter(term => 
-                !salaryRanges.includes(term) && 
-                !locations.includes(term) && 
-                !industries.includes(term)
-            );
-
-            // Apply filters
-            filteredJobs = allJobs.filter((job) => {
-                // Apply salary filter
-                if (salaryFilters.length > 0 && !isSalaryInRange(job.salary, salaryFilters)) {
-                    return false;
-                }
-
-                // Apply location filter
-                if (locationFilters.length > 0 && !matchesLocation(job.location, locationFilters)) {
-                    return false;
-                }
-
-                // Apply industry filter
-                if (industryFilters.length > 0 && !matchesIndustry(job.title, industryFilters)) {
-                    return false;
-                }
-
-                // Apply text search filter
-                if (textSearchTerms.length > 0) {
-                    const jobText = `${job.title} ${job.description} ${job.location}`.toLowerCase();
-                    return textSearchTerms.some(term => jobText.includes(term.toLowerCase()));
-                }
-
-                return true;
-            });
+  // ✅ Fetch category counts only once
+  useEffect(() => {
+    const fetchCategoryCounts = async () => {
+      try {
+        const response = await axios.get(`${JOB_API_ENDPOINT}/category-counts`);
+        if (response.data.success) {
+          setCategoryCounts(response.data.categoryCounts);
         }
+      } catch (error) {
+        console.error('Error fetching category counts:', error);
+      }
+    };
+    fetchCategoryCounts();
+  }, []);
 
-        setFilterJobs(filteredJobs);
-    }, [allJobs, searchedQuery]);
+  // ✅ Update jobs when category changes
+  useEffect(() => {
+    const fetchJobsByCategory = async () => {
+      if (!selectedCategory || selectedCategory === "all") {
+        setFilterJobs(allJobs);
+        return;
+      }
+      try {
+        const response = await axios.get(
+          `${JOB_API_ENDPOINT}/get?category=${encodeURIComponent(selectedCategory)}`,
+          { withCredentials: true }
+        );
+        if (response.data.success) {
+          setFilterJobs(response.data.jobs);
+        }
+      } catch (error) {
+        console.error("Error fetching jobs by category:", error);
+        setFilterJobs([]);
+      }
+    };
 
-    return (
-        <div>
-            <Navbar />
-            <div className='max-w-[1400px] mx-auto mt-4 sm:mt-6 mb-5 px-4 sm:px-6 lg:px-8'>
-                {/* Mobile Filter Toggle */}
-                <div className='lg:hidden mb-4'>
-                    <Button
-                        onClick={() => setShowFilters(!showFilters)}
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2"
-                    >
-                        <Filter className="h-4 w-4" />
-                        {showFilters ? 'Hide Filters' : 'Show Filters'}
-                    </Button>
-                </div>
+    fetchJobsByCategory();
+  }, [selectedCategory, allJobs]);
 
-                <div className='flex flex-col lg:flex-row gap-4 lg:gap-5'>
-                    {/* Filter Sidebar */}
-                    <div className={`lg:w-[18%] ${showFilters ? 'block' : 'hidden lg:block'}`}>
-                        <FilterCard />
-                    </div>
-
-                    {/* Jobs Grid */}
-                    {
-                        filterJobs.length <= 0 ? (
-                            <div className='flex-1 flex items-center justify-center h-[50vh]'>
-                                <span className='text-gray-500 text-lg'>Jobs not found</span>
-                            </div>
-                        ) : (
-                            <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
-                                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
-                                    {
-                                        filterJobs.map((job) => (
-                                            <div key={job._id}>
-                                                <Job job={job} />
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        )
-                    }
-                </div>
-            </div>
-            <Footer />
+  return (
+    <div>
+      <Navbar />
+      <div className='max-w-[1400px] mx-auto mt-4 sm:mt-6 mb-5 px-4 sm:px-6 lg:px-8'>
+        
+        {/* Mobile Filter Toggle */}
+        <div className='lg:hidden mb-4'>
+          <Button
+            onClick={() => setShowFilters(!showFilters)}
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2"
+          >
+            <Filter className="h-4 w-4" />
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </Button>
         </div>
-    )
+
+        {/* Category Filter */}
+        <div className='mb-4'>
+          <span className='text-sm font-medium text-gray-700 block mb-2'>Browse by Category:</span>
+          <Select value={selectedCategory} onValueChange={(val) => setSelectedCategory(val)}>
+            <SelectTrigger className="w-full sm:w-[300px]">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {JOB_CATEGORIES.map((category) => {
+                const count = categoryCounts.find(c => c.category === category.value)?.count || 0;
+                return (
+                  <SelectItem key={category.value} value={category.value}>
+                    <div className="flex items-center gap-2">
+                      <span>{category.icon}</span>
+                      <span>{category.label}</span>
+                      <span className="text-gray-500 text-sm">({count})</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className='flex flex-col lg:flex-row gap-4 lg:gap-5'>
+          {/* Filter Sidebar */}
+          <div className={`lg:w-[18%] ${showFilters ? 'block' : 'hidden lg:block'}`}>
+            <FilterCard />
+          </div>
+
+          {/* Jobs Grid */}
+          {
+            filterJobs.length <= 0 ? (
+              <div className='flex-1 flex items-center justify-center h-[50vh]'>
+                <span className='text-gray-500 text-lg'>Jobs not found</span>
+              </div>
+            ) : (
+              <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
+                  {filterJobs.map((job) => (
+                    <div key={job._id}>
+                      <Job job={job} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 }

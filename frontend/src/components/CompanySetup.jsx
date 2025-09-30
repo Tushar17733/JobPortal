@@ -13,6 +13,7 @@ import useGetCompanyById from '../hooks/useGetCompanyById';
 import { setLoading } from '../redux/authSlice';
 
 export default function CompanySetup() {
+
     const params = useParams();
     useGetCompanyById(params.id);
     const { loading } = useSelector(store => store.auth)
@@ -98,7 +99,7 @@ export default function CompanySetup() {
                             <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                             <span className="text-sm sm:text-base">Back</span>
                         </Button>
-                        <h1 className='font-bold text-lg sm:text-xl lg:text-2xl sm:ml-auto'>Company Setup</h1>
+                        <h1 className='font-bold text-lg sm:text-xl lg:text-2xl sm:ml-[20%]'>Company Setup</h1>
                     </div>
 
                     {/* Grid */}

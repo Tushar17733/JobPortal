@@ -37,6 +37,7 @@ export default function HeroSection() {
                     <Button onClick={searchJobHandler} className="rounded-r-full bg-[#6A38C2] cursor-pointer px-3 sm:px-4 py-2 sm:py-3">
                         <Search className='h-4 w-4 sm:h-5 sm:w-5 cursor-pointer' />
                     </Button>
+                   
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from '../shared/Navbar';
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '@/redux/authSlice'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { JOB_API_ENDPOINT } from '../../utils/constant';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import ReactQuill from "react-quill-new";
@@ -16,7 +16,19 @@ import "react-quill-new/dist/quill.snow.css";
 
 export default function PostJob() {
     const { companies } = useSelector(store => store.company);
+    const location = useLocation();
+    const editJobId = useMemo(() => new URLSearchParams(location.search).get('edit'), [location.search]);
 
+    const JOB_CATEGORIES = [
+        { value: "IT & Software Development", label: "IT & Software Development", icon: "💻" },
+        { value: "Mechanical Engineering", label: "Mechanical Engineering", icon: "🔧" },
+        { value: "Civil Engineering", label: "Civil Engineering", icon: "🏗️" },
+        { value: "Electrical & Electronics", label: "Electrical & Electronics", icon: "⚡" },
+        { value: "Finance & Accounting", label: "Finance & Accounting", icon: "💰" },
+        { value: "Sales & Marketing", label: "Sales & Marketing", icon: "📈" },
+        { value: "Education & Training", label: "Education & Training", icon: "🎓" },
+      ];
+      
     const [input, setInput] = useState({
         title: "",
         description: "",
@@ -26,8 +38,13 @@ export default function PostJob() {
         jobType: "",
         experience: "",
         position: 0,
-        companyId: ""
+        companyId: "",
+        category: ""
     });
+    const selectedCompanyValue = useMemo(() => {
+        const company = companies.find(c => c?._id === input.companyId);
+        return company ? company.name.toLowerCase() : undefined;
+    }, [companies, input.companyId]);
     const navigate = useNavigate();
     const { loading } = useSelector(store => store.auth)
     const dispatch = useDispatch()
@@ -40,6 +57,10 @@ export default function PostJob() {
         const company = companies.find(company => company.name.toLowerCase() === value);
         setInput({ ...input, companyId: company?._id });
     }
+
+    const categoryChangeEventHandler = (value) => {
+        setInput({ ...input, category: value });
+    }
     const descriptionChangeHandler = (value) => {
         setInput({ ...input, description: value });
     }
@@ -50,6 +71,33 @@ export default function PostJob() {
         position: Number(input.position),
     };
 
+    useEffect(() => {
+        const fetchAndPrefill = async () => {
+            if (!editJobId) return;
+            try {
+                const res = await axios.get(`${JOB_API_ENDPOINT}/get/${editJobId}`, { withCredentials: true });
+                if (res.data?.success && res.data.job) {
+                    const job = res.data.job;
+                    setInput({
+                        title: job.title || "",
+                        description: job.description || "",
+                        requirements: Array.isArray(job.requirements) ? job.requirements.join(',') : (job.requirements || ""),
+                        salary: job.salary ?? "",
+                        location: job.location || "",
+                        jobType: job.jobType || "",
+                        experience: job.experienceLevel ?? "",
+                        position: job.position ?? 0,
+                        companyId: job.company?._id || job.company || "",
+                        category: job.category || ""
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to prefill job:', err);
+            }
+        };
+        fetchAndPrefill();
+    }, [editJobId]);
+
     const submitEventHandler = async (e) => {
         e.preventDefault();
 
@@ -58,9 +106,16 @@ export default function PostJob() {
             return;
         }
 
+        if (!input.category) {
+            toast.error("Please select a category before posting a job");
+            return;
+        }
+
         try {
             dispatch(setLoading(true));
-            const response = await axios.post(`${JOB_API_ENDPOINT}/post`, input,
+            const endpoint = editJobId ? `${JOB_API_ENDPOINT}/update/${editJobId}` : `${JOB_API_ENDPOINT}/post`;
+            const method = editJobId ? 'put' : 'post';
+            const response = await axios[method](endpoint, input,
                 {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
@@ -70,10 +125,10 @@ export default function PostJob() {
 
 
             if (response.data.success) {
-                toast.success(response.data.message || "Job posted successfully");
+                toast.success(response.data.message || (editJobId ? "Job updated successfully" : "Job posted successfully"));
                 navigate("/admin/jobs");
             } else {
-                toast.error(response.data.message || "Failed to post job");
+                toast.error(response.data.message || (editJobId ? "Failed to update job" : "Failed to post job"));
             }
         } catch (error) {
             const errMsg = error?.response?.data?.message || error.message || "Something went wrong";
@@ -89,7 +144,7 @@ export default function PostJob() {
             <Navbar />
             <div className='flex items-center justify-center w-full my-5 px-4 sm:px-6 lg:px-8'>
                 <form onSubmit={submitEventHandler} className='p-4 sm:p-6 lg:p-8 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] border border-gray-200 shadow-lg rounded-md'>
-                    <h1 className='font-bold text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-center sm:text-left'>Post New Job</h1>
+                    <h1 className='font-bold text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-center sm:text-left'>{editJobId ? 'Edit Job' : 'Post New Job'}</h1>
 
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5'>
                         <div>
@@ -170,11 +225,39 @@ export default function PostJob() {
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 text-sm sm:text-base"
                             />
                         </div>
+                        <div>
+                            <Label className="text-sm sm:text-base mb-2 block">Select Category</Label>
+                            <Select className="w-full cursor-pointer" value={input.category} onValueChange={categoryChangeEventHandler}>
+                                <SelectTrigger className="w-full cursor-pointer text-sm sm:text-base">
+                                    <SelectValue placeholder="Select a Category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {
+                                            JOB_CATEGORIES.map((category) => {
+                                                return (
+                                                    <SelectItem
+                                                        className="cursor-pointer"
+                                                        key={category.value}
+                                                        value={category.value}
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <span>{category.icon}</span>
+                                                            <span>{category.label}</span>
+                                                        </div>
+                                                    </SelectItem>
+                                                )
+                                            })
+                                        }
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
                         {
                             companies.length !== 0 && (
                                 <div className="col-span-1 sm:col-span-2">
                                     <Label className="text-sm sm:text-base mb-2 block">Select Company</Label>
-                                    <Select className="w-full cursor-pointer" onValueChange={selectChangeEventHandler}>
+                                    <Select className="w-full cursor-pointer" value={selectedCompanyValue} onValueChange={selectChangeEventHandler}>
                                         <SelectTrigger className="w-full cursor-pointer text-sm sm:text-base">
                                             <SelectValue placeholder="Select a Company" />
                                         </SelectTrigger>
@@ -208,7 +291,7 @@ export default function PostJob() {
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
                             </>
                         ) : (
-                            "Post New Job"
+                            editJobId ? 'Save Changes' : "Post New Job"
                         )}
                     </Button>
 

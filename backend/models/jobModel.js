@@ -47,7 +47,22 @@ const jobSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Application'
     }
-  ]
+  ],
+  category: {
+    type: String,
+    required: true,
+    enum: [
+      "IT & Software Development",
+      "Mechanical Engineering", 
+      "Civil Engineering",
+      "Electrical & Electronics",
+      "Finance & Accounting",
+      "Sales & Marketing",
+      "Human Resources (HR)",
+      "Education & Training",
+      "Business Development"
+    ]
+  }
 }, { timestamps: true });
 
 export const Job = mongoose.model("Job", jobSchema);
