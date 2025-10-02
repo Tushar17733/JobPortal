@@ -15,7 +15,7 @@ export default function FilterCard() {
     },
     {
       filterType: "Salary",
-      array: ["0-40k", "40k-1lakh", "1lakh to 5lakh"]
+      array: ["0-5 LPA", "5-10 LPA", "10+ LPA"]
     },
   ];
 

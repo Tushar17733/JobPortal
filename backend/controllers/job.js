@@ -72,12 +72,12 @@ export const getAllJobs = async (req, res) => {
     // Add salary filter if provided
     if (salaryRanges.length > 0) {
       const salaryConditions = salaryRanges.map(range => {
-        if (range === "0-40k") {
-          return { salary: { $gte: 0, $lte: 40000 } };
-        } else if (range === "40k-1lakh") {
-          return { salary: { $gt: 40000, $lte: 100000 } };
-        } else if (range === "1lakh to 5lakh") {
-          return { salary: { $gt: 100000, $lte: 500000 } };
+        if (range === "0-5 LPA") {
+          return { salary: { $gte: 0, $lte: 5 } };
+        } else if (range === "5-10 LPA") {
+          return { salary: { $gt: 5, $lte: 10 } };
+        } else if (range === "10+ LPA") {
+          return { salary: { $gt: 10 } };
         }
         return null;
       }).filter(cond => cond !== null);
