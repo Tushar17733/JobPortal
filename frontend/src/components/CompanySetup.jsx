@@ -153,7 +153,7 @@ export default function CompanySetup() {
 
                         {/* Location (to the right of Logo) */}
                         <div>
-                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Location</Label>
+                            <Label className="mb-2 sm:mb-[10px] text-sm sm:text-base">Headquarters</Label>
                             <Input
                                 type="text"
                                 name="location"

@@ -45,9 +45,9 @@ export default function CompaniesTable() {
                         Array.isArray(filterCompany) && filterCompany.map((company) => (
                             <tr key={company._id} className='hover:bg-gray-50'>
                                 <TableCell>
-                                    <Avatar className='h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24'>
+                                    <Avatar className='h-16 w-16 sm:h-20 sm:w-20 lg:h-36 lg:w-36'>
                                         <AvatarImage 
-                                            className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full" 
+                                            className="h-8 w-8 sm:h-10 sm:w-10 lg:h-14 lg:w-14 rounded-full" 
                                             src={company.logo || "https://icons.veryicon.com/png/o/miscellaneous/zr_icon/company-23.png"} 
                                         />
                                     </Avatar>

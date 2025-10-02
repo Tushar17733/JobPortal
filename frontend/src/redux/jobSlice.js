@@ -11,7 +11,8 @@ const jobSlice = createSlice({
         savedJobs: [],
         searchedQuery: "",
         filters: {
-            location: "", // free text or selected city
+            location: [], // array of selected locations
+            salary: [], // array of selected salary ranges
             jobType: "", // one of JOB_TYPES
             experienceLevel: "", // 'fresher' | 'senior'
             salaryRange: "", // '0-5' | '5-10' | '10+'
@@ -65,7 +66,7 @@ const jobSlice = createSlice({
           },
           
         clearFilters: (state) => {
-            state.filters = { location: "", jobType: "", experienceLevel: "", salaryRange: "", postedDate: "any" };
+            state.filters = { location: [], salary: [], jobType: "", experienceLevel: "", salaryRange: "", postedDate: "any" };
         }
     }
 })

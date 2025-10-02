@@ -4,18 +4,14 @@ import { Label } from './ui/label';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { setSearchedQuery } from '../redux/jobSlice';
+import { setFilters } from '../redux/jobSlice';
 
 export default function FilterCard() {
   
   const filterData = [
     {
       filterType: "Location",
-      array: ["Surat", "Bangalore", "Hyderabad", "US", "Mumbai"]
-    },
-    {
-      filterType: "Industry",
-      array: ["Frontend Developer", "Backend Developer", "FullStack Developer"]
+      array: ["Surat","kosamba", "Bangalore", "US", "Mumbai","Noida","Delhi","Kota"]
     },
     {
       filterType: "Salary",
@@ -25,7 +21,6 @@ export default function FilterCard() {
 
   const [selectedFilters, setSelectedFilters] = useState({
     Location: [],
-    Industry: [],
     Salary: []
   });
   const dispatch = useDispatch();
@@ -52,13 +47,7 @@ export default function FilterCard() {
   };
 
   useEffect(() => {
-    // Combine all selected filters into a search query
-    const allFilters = [];
-    Object.values(selectedFilters).forEach(filterArray => {
-      allFilters.push(...filterArray);
-    });
-    const searchQuery = allFilters.join(' ');
-    dispatch(setSearchedQuery(searchQuery));
+    dispatch(setFilters({ location: selectedFilters.Location, salary: selectedFilters.Salary }));
   }, [selectedFilters, dispatch]);
 
   return (

@@ -8,6 +8,7 @@ import { Button } from './ui/button'
 import { Filter } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import useSavedJobs from '../hooks/useSavedJobs'
+import useGetAllJobs from '../hooks/useGetAllJobs'
 import { setSearchedQuery } from '../redux/jobSlice'
 import axios from 'axios'
 import { JOB_API_ENDPOINT } from '../utils/constant'
@@ -23,8 +24,10 @@ export default function Jobs() {
     { value: "Education & Training", label: "Education & Training", icon: "🎓" },
   ];
   
+  useGetAllJobs();
   useSavedJobs();
-  const { allJobs = [] } = useSelector(store => store.job) || {};
+  const { allJobs = [], filters = { location: [], salary: [] } } = useSelector(store => store.job) || {};
+
   const dispatch = useDispatch();
   
   const [showFilters, setShowFilters] = useState(false);
@@ -47,29 +50,37 @@ export default function Jobs() {
     fetchCategoryCounts();
   }, []);
 
-  // ✅ Update jobs when category changes
+  // ✅ Update jobs when category or filters change
   useEffect(() => {
-    const fetchJobsByCategory = async () => {
-      if (!selectedCategory || selectedCategory === "all") {
-        setFilterJobs(allJobs);
-        return;
-      }
+    const fetchJobsByCategoryAndFilters = async () => {
       try {
+        const params = new URLSearchParams();
+        if (selectedCategory && selectedCategory !== "all") {
+          params.append('category', selectedCategory);
+        }
+        // Add location and salary filters from redux store
+        if (filters.location.length) {
+          params.append('location', filters.location.join(','));
+        }
+        if (filters.salary.length) {
+          params.append('salary', filters.salary.join(','));
+        }
+
         const response = await axios.get(
-          `${JOB_API_ENDPOINT}/get?category=${encodeURIComponent(selectedCategory)}`,
+          `${JOB_API_ENDPOINT}/get?${params.toString()}`,
           { withCredentials: true }
         );
         if (response.data.success) {
           setFilterJobs(response.data.jobs);
         }
       } catch (error) {
-        console.error("Error fetching jobs by category:", error);
+        console.error("Error fetching jobs by category and filters:", error);
         setFilterJobs([]);
       }
     };
 
-    fetchJobsByCategory();
-  }, [selectedCategory, allJobs]);
+    fetchJobsByCategoryAndFilters();
+  }, [selectedCategory, allJobs, filters.location, filters.salary]);
 
   return (
     <div>

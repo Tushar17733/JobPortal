@@ -41,21 +41,50 @@ export const getAllJobs = async (req, res) => {
     //Gets the search keyword from the URL query (like /jobs?keyword=developer).
     const keyword = req.query.keyword || "";
     const category = req.query.category || "";
+    const location = req.query.location ? req.query.location.split(",") : [];
+    const salaryRanges = req.query.salary ? req.query.salary.split(",") : [];
 
     // Prepares a MongoDB query to search for jobs:
     // It looks for jobs where either the title or description contains the keyword.
     // $regex is used for partial match (like "contains").
     // $options: "i" makes the search case-insensitive (doesn't care about upper/lowercase).
     const query = {
-      $or: [
-        { title: { $regex: keyword, $options: "i" } },
-        { description: { $regex: keyword, $options: "i" } },
+      $and: [
+        {
+          $or: [
+            { title: { $regex: keyword, $options: "i" } },
+            { description: { $regex: keyword, $options: "i" } },
+          ]
+        }
       ]
     };
 
     // Add category filter if provided
     if (category) {
-      query.category = category;
+      query.$and.push({ category });
+    }
+
+    // Add location filter if provided
+    if (location.length > 0) {
+      query.$and.push({ location: { $in: location } });
+    }
+
+    // Add salary filter if provided
+    if (salaryRanges.length > 0) {
+      const salaryConditions = salaryRanges.map(range => {
+        if (range === "0-40k") {
+          return { salary: { $gte: 0, $lte: 40000 } };
+        } else if (range === "40k-1lakh") {
+          return { salary: { $gt: 40000, $lte: 100000 } };
+        } else if (range === "1lakh to 5lakh") {
+          return { salary: { $gt: 100000, $lte: 500000 } };
+        }
+        return null;
+      }).filter(cond => cond !== null);
+
+      if (salaryConditions.length > 0) {
+        query.$and.push({ $or: salaryConditions });
+      }
     }
 
     const jobs = await Job.find(query).populate({

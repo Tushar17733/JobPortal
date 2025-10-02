@@ -6,24 +6,29 @@ import { JOB_API_ENDPOINT } from '../utils/constant';
 
 const useGetAllJobs = () => {
   const dispatch = useDispatch()
-  const {searchedQuery} = useSelector(store=>store.job)
-  
-  useEffect(() => {
-  const fetchAllJobs = async () => {
-    try {
-      // Clear any existing jobs data first to prevent showing stale data
-      dispatch(clearJobs());
-      
-      const res = await axios.get(`${JOB_API_ENDPOINT}/get?keyword=${searchedQuery}`, { withCredentials: true });
-      if (res.data.success) {
-        dispatch(setAllJobs(res.data.jobs));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { searchedQuery, filters } = useSelector(store => store.job)
 
-  fetchAllJobs();
-}, [dispatch, searchedQuery]);
+  useEffect(() => {
+    const fetchAllJobs = async () => {
+      try {
+        // Clear any existing jobs data first to prevent showing stale data
+        dispatch(clearJobs());
+
+        const params = new URLSearchParams();
+        if (searchedQuery) params.append('keyword', searchedQuery);
+        if (filters && filters.location && filters.location.length) params.append('location', filters.location.join(','));
+        if (filters && filters.salary && filters.salary.length) params.append('salary', filters.salary.join(','));
+
+        const res = await axios.get(`${JOB_API_ENDPOINT}/get?${params.toString()}`, { withCredentials: true });
+        if (res.data.success) {
+          dispatch(setAllJobs(res.data.jobs));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAllJobs();
+  }, [dispatch, searchedQuery, filters?.location, filters?.salary]);
 }
 export default useGetAllJobs
