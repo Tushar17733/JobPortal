@@ -19,6 +19,7 @@ import Saved from "./components/Saved"
 import Messages from "./components/Messages"
 import AdminMessages from "./components/admin/AdminMessages"
 import useSavedJobs from "./hooks/useSavedJobs"
+import ChatWidget from "./components/ChatWidget"
 
 // Component to initialize saved jobs persistence
 function AppInitializer() {
@@ -105,6 +106,7 @@ function App() {
     <>
       <AppInitializer />
       <RouterProvider router={appRouter} />
+      <ChatWidget />
     </>
   )
 }
