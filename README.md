@@ -3,8 +3,6 @@
 A modern Job Portal built with the MERN stack. It supports candidate and employer workflows, job posting and applications, messaging, saved jobs, and an AI‑powered support chatbot.
 
 
----
-
 ## ✨ Features
 
 - Candidate
@@ -32,7 +30,7 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
   - JWT cookie login, logout, protected routes
   - Responsive UI with Tailwind + Radix UI
 
----
+
 
 ## 🧭 Main Routes
 
@@ -51,7 +49,7 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
   - Applicants
   - Admin Messages
 
----
+
 
 ## 🔌 API Overview
 
@@ -66,7 +64,7 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
 
 > Note: Some routes require authentication; the UI handles protected access.
 
----
+
 
 ## 🤖 AI Chatbot
 
@@ -78,17 +76,14 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
   - “How to update profile?”
 - The assistant keeps context in the current tab and clears on page reload.
 
----
+
 
 ## 🖼️ Screenshot
 
 
 <img width="1778" height="896" alt="image" src="https://github.com/user-attachments/assets/523b6f03-8458-4aeb-a27c-bdf697060fc5" />
 
----
 
-
----
 
 ## 🧱 Tech Stack
 
@@ -96,7 +91,6 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
 - Backend: Node.js, Express, Mongoose (MongoDB), JWT, Multer, Cloudinary
 - AI: OpenAI (Chat Completions API)
 
----
 
 ## 🔗 Useful Links
 
