@@ -69,6 +69,15 @@ export default function Messages() {
                     withCredentials: true
                 });
                 setMessages(response.data.messages || []);
+                
+                // Update the unread count to 0 for this conversation
+                setConversations(prevConversations => 
+                    prevConversations.map(conv => 
+                        conv._id === selectedConversation._id 
+                            ? { ...conv, unreadCount: 0 } 
+                            : conv
+                    )
+                );
             } catch (error) {
                 console.error('Error fetching messages:', error);
                 toast.error('Failed to load messages');
