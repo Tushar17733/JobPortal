@@ -36,9 +36,11 @@ app.use("/api/v1/application", applicationRoute)
 app.use("/api/v1/messaging", messagingRoute)
 app.use("/api/chat", chatRoute)
 
-
+// Serve static files from React build
 app.use(express.static(path.join(_dirname, "/frontend/dist")))
-app.get('/', (_, res) => {
+
+// Handle client-side routing - serve index.html for all non-API routes
+app.get('*', (req, res) => {
     res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
 })
 

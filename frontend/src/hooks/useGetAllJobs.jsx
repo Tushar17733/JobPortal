@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAllJobs, clearJobs } from '../redux/jobSlice';
+import { setAllJobs } from '../redux/jobSlice';
 import axios from 'axios';
 import { JOB_API_ENDPOINT } from '../utils/constant';
 
@@ -11,9 +11,6 @@ const useGetAllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
-        // Clear any existing jobs data first to prevent showing stale data
-        dispatch(clearJobs());
-
         const params = new URLSearchParams();
         if (searchedQuery) params.append('keyword', searchedQuery);
         if (filters && filters.location && filters.location.length) params.append('location', filters.location.join(','));
@@ -25,6 +22,7 @@ const useGetAllJobs = () => {
         }
       } catch (error) {
         console.log(error);
+        dispatch(setAllJobs([]));
       }
     };
 
