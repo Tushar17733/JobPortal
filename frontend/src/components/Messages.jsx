@@ -8,9 +8,7 @@ import { Badge } from './ui/badge'
 import { MessageCircle, Send, User } from 'lucide-react'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { APPLICATION_API_ENDPOINT, USER_API_ENDPOINT } from '../utils/constant'
-
-const MESSAGING_API_ENDPOINT = "http://localhost:8000/api/v1/messaging";
+import { APPLICATION_API_ENDPOINT, USER_API_ENDPOINT, MESSAGING_API_ENDPOINT } from '../utils/constant'
 
 export default function Messages() {
     const { user } = useSelector(store => store.auth);
