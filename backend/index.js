@@ -41,7 +41,7 @@ app.use("/api/chat", chatRoute)
 app.use(express.static(path.join(_dirname, "/frontend/dist")))
 
 // Handle client-side routing - serve index.html for all non-API routes
-app.get('/*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
 })
 
