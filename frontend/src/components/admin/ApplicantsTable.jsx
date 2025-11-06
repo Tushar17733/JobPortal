@@ -4,9 +4,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { MoreHorizontal } from 'lucide-react'
 import { Check, X, MessageCircle } from "lucide-react";
 import { useSelector } from 'react-redux';
-import { APPLICATION_API_ENDPOINT, USER_API_ENDPOINT } from '../../utils/constant';
-
-const MESSAGING_API_ENDPOINT = "http://localhost:8000/api/v1/messaging";
+import { APPLICATION_API_ENDPOINT, USER_API_ENDPOINT, MESSAGING_API_ENDPOINT } from '../../utils/constant';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
@@ -28,11 +26,11 @@ const ApplicantsTable = () => {
         }
     }
 
-    const startChat = async (applicantId, applicantName) => {
+    const startChat = async (applicantId, applicantName, jobId) => {
         try {
             const res = await axios.post(`${MESSAGING_API_ENDPOINT}/conversations/start`, {
                 candidateId: applicantId,
-                jobId: applicants._id
+                jobId: jobId
             }, {
                 withCredentials: true
             });
@@ -41,6 +39,7 @@ const ApplicantsTable = () => {
                 toast.success(`Chat started with ${applicantName}`);
             }
         } catch (error) {
+            console.error('Start chat error:', error);
             toast.error(error.response?.data?.message || 'Failed to start chat');
         }
     }
@@ -113,7 +112,7 @@ const ApplicantsTable = () => {
                                             }
                                             {item.status === 'accepted' && (
                                                 <div 
-                                                    onClick={() => startChat(item?.applicant?._id, item?.applicant?.fullName)} 
+                                                    onClick={() => startChat(item?.applicant?._id, item?.applicant?.fullName, item?.job)} 
                                                     className='flex w-fit items-center my-2 cursor-pointer gap-2 hover:bg-gray-100 p-1 rounded'
                                                 >
                                                     <MessageCircle className="text-blue-500 w-4 h-4" />
