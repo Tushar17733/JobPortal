@@ -25,10 +25,11 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
   - Fresh chat on page reload
   - Uses OpenAI for smart Q&A; falls back to helpful FAQs if unavailable
 
-- Auth & UX
+- Other Features
   - Role‑based auth (candidate/employer)
   - JWT cookie login, logout, protected routes
-  - Responsive UI with Tailwind + Radix UI
+  - Responsive UI on all screen sizes
+  - Deployed on Render
 
 
 
@@ -87,9 +88,9 @@ A modern Job Portal built with the MERN stack. It supports candidate and employe
 
 ## 🧱 Tech Stack
 
-- Frontend: React 19, Vite, Tailwind CSS, Radix UI, Redux Toolkit, React Router
+- Frontend: React 19, Vite, Tailwind CSS, ShadCN UI, Redux Toolkit, React Router
 - Backend: Node.js, Express, Mongoose (MongoDB), JWT, Multer, Cloudinary
-- AI: OpenAI (Chat Completions API)
+- AI: OpenAI API Key 
 
 
 ## 🔗 Useful Links
